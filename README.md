@@ -27,7 +27,7 @@ Trains a genre classifier using TF-IDF and Logistic Regression
 
 Balances class distribution for more accurate results
 
-Supports prediction via a CLI or script
+Longer term goal, improve accuracy of predictions :) 
 
 ## Installing
 

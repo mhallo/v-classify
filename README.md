@@ -43,10 +43,11 @@ Invoke the training script
 
 ## Predicting
 
-For now, invoke the predictor and pass in the string of the title you'd like to predict
+For now, invoke the predictor to predict the genre of the title.
 
 `python3 src/predictor.py`
 
+Within `predictor.py`, you will set the name of the title you want the model to predict it falls under.
 
 ## Formatting
 

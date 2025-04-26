@@ -1,11 +1,11 @@
 import joblib
+import matplotlib.pyplot as plt
 import polars as pl
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import classification_report, ConfusionMatrixDisplay
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import ConfusionMatrixDisplay, classification_report
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-import matplotlib.pyplot as plt
 
 # Load the dataset
 df = pl.read_csv("data/games.csv", null_values=["N/A"])

@@ -1,13 +1,19 @@
 import joblib
 import polars as pl
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+import matplotlib.pyplot as plt
 
 # Load the dataset
 df = pl.read_csv("data/games.csv", null_values=["N/A"])
+
+print(f"Initial dataset: {len(df)}")
+df = df.filter(df["Genre"].is_not_null())
+df = df.unique(["Name", "Genre"])
+print(f"Dataset after some filtering {len(df)}")
 
 # Clean the title names for the classifier
 df = df.with_columns(
@@ -21,6 +27,7 @@ df = df.with_columns(pl.col("Genre").cast(pl.Categorical).to_physical().alias("G
 
 print(df.schema)
 print(df.head())
+print(df["Genre"].value_counts())
 
 # Split the dataset into training and testing sets
 X = df["cleaned_name"]
@@ -32,16 +39,27 @@ X_train, X_test, y_train, y_test = train_test_split(
 # Create a pipeline with a vectorizer and a classifier
 pipeline = Pipeline(
     [
-        ("vectorizer", TfidfVectorizer()),  # Convert text to feature vectors
+        (
+            "vectorizer",
+            TfidfVectorizer(
+                ngram_range=(1, 2),  # Include unigrams and bigrams
+                max_df=0.95,  # ignore terms that appear in 95% of docs
+                min_df=2,  # ignore terms that appear in only 1 games title
+                stop_words="english",  # remove generic words
+            ),
+        ),
         (
             "classifier",
-            MultinomialNB(),
-        ),  # Classifier: Naive Bayes for text classification
+            LogisticRegression(max_iter=1000, class_weight="balanced"),
+        ),
     ]
 )
 
 # Train the model
 pipeline.fit(X_train, y_train)
+
+ConfusionMatrixDisplay.from_estimator(pipeline, X_test, y_test)
+plt.show()
 
 # Test the model
 y_pred = pipeline.predict(X_test)

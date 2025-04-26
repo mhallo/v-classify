@@ -35,10 +35,6 @@ Build and activate a virtual environment, and install the requirements to run th
 
 `pip3 install -r requirements.txt`
 
-## Formatting
-
-This project uses `ruff` for formatting and linting.
-
 ## Training 
 
 Invoke the training script
@@ -50,3 +46,28 @@ Invoke the training script
 For now, invoke the predictor and pass in the string of the title you'd like to predict
 
 `python3 src/predictor.py`
+
+
+## Formatting
+
+This project uses `ruff` for formatting and linting.
+
+Here is a short list of commands to use to keep the repo in check.
+
+Fix linter complaints:
+
+`ruff check --fix` 
+
+Format python files:
+
+`ruff format`
+
+Address import order complaints:
+
+`ruff check --select I --fix`
+
+Additional configurations can be found under the root `pyproject.toml`.
+
+## License
+
+MIT
